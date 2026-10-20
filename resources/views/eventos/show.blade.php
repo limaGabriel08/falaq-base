@@ -44,6 +44,14 @@
                         <span>Por: {{ $pergunta->user->name ?? 'Anônimo' }} &nbsp;|&nbsp; Status: <span class="badge bg-success">{{ $pergunta->status }}</span></span>
                         <span>{{ $pergunta->created_at->format('d/m/Y H:i') }}</span>
                     </div>
+
+                    @can('delete', $pergunta)
+                        <form action="{{ route('eventos.perguntas.destroy', [$evento->id, $pergunta->id]) }}" method="POST" class="mt-2">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button type="submit">Excluir Pergunta</x-danger-button>
+                        </form>
+                    @endcan
                 </div>
             </div>
         @empty

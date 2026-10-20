@@ -10,7 +10,7 @@ class Pergunta extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['evento_id', 'texto', 'status', 'user_id', 'is_public'];
+    protected $fillable = ['evento_id', 'user_id', 'texto', 'status', 'is_public'];
 
     public function evento(): BelongsTo
     {
