@@ -26,7 +26,8 @@ class EventoFormRequest extends FormRequest
             'titulo' => 'string|required', 
             'descricao' => 'string', 
             'data_evento' => 'date',
-            'user_id' => ''
+            'user_id' => '',
+            'status' => 'required|in:rascunho,publicado,encerrado'
             
         ];
     }

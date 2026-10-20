@@ -24,6 +24,9 @@
             </a>
             @auth
                 <span>Olá, {{ Auth::user()->name }}</span>
+                <a class="navbar-brand" href="{{ route('user.eventos') }}">
+                    Meus Eventos
+                </a>
                 <form method="post" action="{{ route('auth.logout') }}">
                     @csrf
                     <button type="submit" class="bg-gray-800 text-gray-200 px-4 py-2 rounded-md hover:bg-blue-700">Logout</button>
@@ -36,6 +39,7 @@
                 <a class="navbar-brand" href="{{ route('register.create') }}">
                     Registro
                 </a>
+ 
             @endguest
 
         </div>

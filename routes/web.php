@@ -12,11 +12,20 @@ Route::middleware('auth')->group(function () {
         ->name('eventos.store');
     Route::post('/eventos/{evento}/participar', [EventoController::class, 'toggleInscricao'])
         ->name('eventos.participar');
+    Route::patch('/eventos/{evento}/status', [EventoController::class, 'updateStatus'])
+        ->name('eventos.status');
+
+    Route::get('/user/eventos', [EventoController::class, 'userEventos'])
+        ->name('user.eventos');
+    Route::get('/eventos/{evento}/edit', [EventoController::class, 'edit'])->name('eventos.edit');
+    Route::put('/eventos/{evento}', [EventoController::class, 'update'])->name('eventos.update');
 });
+
 
 Route::get('/', [EventoController::class, 'index'])->name('eventos.index');
 Route::get('/eventos/{id}', [EventoController::class, 'show'])->name('eventos.show');
 Route::post('/eventos/{id}/perguntas', [EventoController::class, 'storePergunta'])->name('eventos.perguntas.store');
+
 
 Route::get('/register', [RegisterController::class, 'create'])->name('register.create');
 Route::post('/register', [RegisterController::class, 'store'])->name('register.store');

@@ -11,7 +11,13 @@ class Evento extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titulo', 'descricao', 'data_evento', 'user_id'];
+    protected $fillable = [
+        'titulo', 
+        'descricao', 
+        'data_evento', 
+        'user_id',
+        'status', // 🔒 OBRIGATÓRIO: impede MassAssignmentException
+    ];
 
     public function perguntas(): HasMany
     {
@@ -20,6 +26,10 @@ class Evento extends Model
     public function participantes(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'evento_user')->withTimestamps();
+    }
+    public function isPublicado(): bool
+    {
+        return $this->status === 'publicado';
     }
 
 }

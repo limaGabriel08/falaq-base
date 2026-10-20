@@ -34,6 +34,9 @@
                     <a href="{{ route('eventos.show', $evento->id) }}" class="btn btn-primary btn-sm">
                         Entrar no Evento &rarr;
                     </a>
+                    <span class="badge bg-blue" style="background:#7c6af7;">
+                        {{ $evento->status }}
+                    </span>
                 </div>
             </div>
         </div>

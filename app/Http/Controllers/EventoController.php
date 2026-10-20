@@ -7,6 +7,7 @@ use App\Models\Evento;
 use App\Models\Pergunta;
 use App\Http\Requests\StorePerguntaRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Use_;
 
@@ -15,7 +16,9 @@ class EventoController extends Controller
     public function index()
     {
         $eventos = Evento::withCount('participantes')
+            ->where('status', 'publicado')
             ->orderByDesc('participantes_count')
+            ->latest()
             ->get();
         return view('eventos.index', compact('eventos'));
     }
@@ -63,4 +66,32 @@ class EventoController extends Controller
         return back()->with('status', 'Inscrição atualizada com sucesso!');
     }
 
+    public function updateStatus(Request $request, Evento $evento)
+    {
+        $request->validate([
+            'status' => 'required|in:rascunho,publicado,encerrado',
+        ]);
+
+        $evento->update([
+            'status' => $request->status,
+        ]);
+
+        return back()->with('status', 'Status do evento atualizado com sucesso!');
+    }
+
+
+    public function userEventos(){
+        $eventos = Auth::user()->eventos()->latest()->paginate(10);
+
+        return view('eventos.index', compact('eventos'));
+    }
+
+    public function edit(Evento $evento){
+        return view('eventos.edit', compact('evento'));
+    }
+
+    public function update(EventoFormRequest $request, Evento $evento){
+        $evento = $evento->update($request->validated());
+        return redirect('eventos.show', $evento)->with('success', "Evento atualizado com sucesso!");
+    }
 }

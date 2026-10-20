@@ -3,7 +3,7 @@
 @section('title', $evento->titulo . ' — FalaQ')
 
 @section('content')
-<div class="row">[
+<div class="row">
     <div class="flex items-center gap-4 my-4">
         <span class="text-sm font-semibold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
             👥 {{ $evento->participantes->count() }} participante(s)
@@ -17,6 +17,17 @@
                 </button>
             </form>
         @endauth
+
+        @can('update', $evento)
+            <form action="{{ route('eventos.status', $evento) }}" method="POST">
+                @csrf
+                @method('patch')
+                <input type="text" value="{{ $evento->isPublicado() ? 'encerrado' : 'publicado' }}" name="status" hidden >
+                <button type="submit" class="px-4 py-2 text-sm font-medium rounded-md {{ $evento->participantes->contains(auth()->user()) ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-green-600 hover:bg-green-700 text-white' }}">
+                    {{ $evento->isPublicado() ? 'Encerrar' : 'Publicar' }}
+                </button>
+            </form>
+        @endcan
     </div>
     <!-- Formularço de envio de Pergunta -->
     <div class="col-md-5 mb-4">
