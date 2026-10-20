@@ -6,18 +6,22 @@ use App\Http\Requests\EventoFormRequest;
 use App\Models\Evento;
 use App\Models\Pergunta;
 use App\Http\Requests\StorePerguntaRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use PhpParser\Builder\Use_;
 
 class EventoController extends Controller
 {
     public function index()
     {
-        $eventos = Evento::all();
+        $eventos = Evento::withCount('participantes')
+            ->orderByDesc('participantes_count')
+            ->get();
         return view('eventos.index', compact('eventos'));
     }
 
-    public function show($id)
+    public function show(string $id)
     {
         $evento = Evento::findOrFail($id);
 
@@ -66,4 +70,14 @@ class EventoController extends Controller
         return redirect()->route('eventos.show', $id)
             ->with('sucesso', 'Pergunta excluída com sucesso!');
     }
+
+    public function toggleInscricao(Evento $evento){
+        // dd($evento);
+        $evento->participantes()->toggle(Auth::id());
+        // $evento->participantes()->attach(Auth::id());
+        // $user = User::find(Auth::id());
+        // $user->eventosInscritos()->attach($evento->id);
+        return back()->with('status', 'Inscrição atualizada com sucesso!');
+    }
+
 }
