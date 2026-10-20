@@ -3,7 +3,7 @@
 @section('title', $evento->titulo . ' — FalaQ')
 
 @section('content')
-<div class="row">[
+<div class="row">
     <div class="flex items-center gap-4 my-4">
         <span class="text-sm font-semibold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
             👥 {{ $evento->participantes->count() }} participante(s)
@@ -57,6 +57,19 @@
                     <div class="d-flex justify-content-between align-items-center text-secondary small">
                         <span>Por: {{ $pergunta->user->name ?? 'Anônimo' }} &nbsp;|&nbsp; Status: <span class="badge bg-success">{{ $pergunta->status }}</span></span>
                         <span>{{ $pergunta->created_at->format('d/m/Y H:i') }}</span>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2 mt-2">
+                        <span class="badge bg-secondary">⭐ {{ $pergunta->votos_count }} {{ $pergunta->votos_count == 1 ? 'voto' : 'votos' }}</span>
+
+                        @auth
+                            <form action="{{ route('perguntas.votar', $pergunta) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-sm {{ $pergunta->votou ? 'btn-warning fw-bold' : 'btn-outline-warning' }}">
+                                    {{ $pergunta->votou ? '▲ Votado (clique para remover)' : '▲ Votar' }}
+                                </button>
+                            </form>
+                        @endauth
                     </div>
 
                     @can('delete', $pergunta)
