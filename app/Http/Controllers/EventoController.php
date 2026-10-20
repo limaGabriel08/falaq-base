@@ -18,9 +18,11 @@ class EventoController extends Controller
 
     public function show($id)
     {
-        $evento = Evento::find($id);
+        $evento = Evento::findOrFail($id);
 
-        $perguntas = Pergunta::all();
+        $perguntas = Pergunta::where('evento_id', $id)
+            ->latest()
+            ->paginate(10);
 
         return view('eventos.show', compact('evento', 'perguntas'));
     }
@@ -32,7 +34,7 @@ class EventoController extends Controller
 
         Pergunta::create([
             'evento_id' => $evento->id,
-            'user_id' => Auth::user()->id,
+            'user_id' => Auth::id(),
             'texto'     => $request->input('texto'),
             'status'    => 'pendente',
         ]);
