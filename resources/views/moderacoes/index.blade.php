@@ -9,10 +9,6 @@
         <a href="{{ route('eventos.show', $evento->id) }}">← Voltar ao evento</a>
     </div>
 
-    @if(session('sucesso'))
-        <div class="alert alert-success">{{ session('sucesso') }}</div>
-    @endif
-
     @forelse($moderacoes as $moderacao)
         <div class="card mb-3 shadow-sm">
             <div class="card-body">
