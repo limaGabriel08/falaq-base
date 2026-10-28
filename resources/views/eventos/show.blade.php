@@ -17,6 +17,10 @@
                 </button>
             </form>
         @endauth
+
+        @can('moderate', $evento)
+            <a href="{{ route('eventos.moderacoes.index', $evento) }}" class="px-4 py-2 text-sm font-medium rounded-md bg-yellow-500 hover:bg-yellow-600 text-white">🛡️ Fila de Moderação</a>
+        @endcan
     </div>
     <!-- Formularço de envio de Pergunta -->
     <div class="col-md-5 mb-4">
@@ -71,6 +75,14 @@
                             </form>
                         @endauth
                     </div>
+
+                    @auth
+                        <form action="{{ route('perguntas.moderar', $pergunta) }}" method="POST" class="mt-2 d-flex gap-2">
+                            @csrf
+                            <input type="text" name="motivo" class="form-control form-control-sm" placeholder="Motivo da denúncia (mín. 10 caracteres)" required minlength="10" maxlength="255">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Denunciar</button>
+                        </form>
+                    @endauth
 
                     @can('delete', $pergunta)
                         <form action="{{ route('eventos.perguntas.destroy', [$evento->id, $pergunta->id]) }}" method="POST" class="mt-2">
